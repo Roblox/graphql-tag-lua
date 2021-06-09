@@ -1,0 +1,12 @@
+{
+  "name": "GraphqlTagTestModel",
+  "tree": {
+    "$className": "Folder",
+    "Packages": {
+      "$path": "Packages",
+      "GraphqlTag": {
+        "$path": "src"
+      }
+    }
+  }
+}
