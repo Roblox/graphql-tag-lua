@@ -121,7 +121,9 @@ local function gql(literals: string)
 	if typeof(literals) == "string" then
 		return parseDocument(literals)
 	end
-	error("graphql-tag-lua does not currently support non-strings or Fragments. Please file an issue or PR if you need this feature added.")
+	error(
+		"graphql-tag-lua does not currently support non-strings or Fragments. Please file an issue or PR if you need this feature added."
+	)
 end
 --[[ export function gql(
   literals: string | readonly string[],
