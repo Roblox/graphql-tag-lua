@@ -7,7 +7,7 @@ type DefinitionNode = GraphQLModule.DefinitionNode
 type Location = GraphQLModule.Location
 -- ROBLOX fix: add map to luau polyfills
 local Map = require(script.luaUtils.Map).Map
-local LuauPolyfill = require(rootWorkspace.Parent.Packages.Dev.LuauPolyfill)
+local LuauPolyfill = require(rootWorkspace.Parent.Packages.LuauPolyfill)
 local Set = LuauPolyfill.Set
 local String = LuauPolyfill.String
 local Object = LuauPolyfill.Object

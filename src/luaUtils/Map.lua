@@ -1,7 +1,8 @@
 -- ROBLOX TODO: move this implementation to LuauPolyfill
 
-local rootWorkspace = script.Parent.Parent
-local LuauPolyfill = require(rootWorkspace.Parent.Parent.Packages.Dev.LuauPolyfill)
+local srcWorkspace = script.Parent.Parent
+local rootWorkspace = srcWorkspace.Parent
+local LuauPolyfill = require(rootWorkspace.LuauPolyfill)
 local Array = LuauPolyfill.Array
 local Object = LuauPolyfill.Object
 local instanceOf = LuauPolyfill.instanceOf

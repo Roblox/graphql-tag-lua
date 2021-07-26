@@ -1,13 +1,14 @@
 -- upstream: https://github.com/apollographql/graphql-tag/blob/v2.12.3/src/tests.ts
 -- ROBLOX DEVIATION: swapping chai to jest
 return function()
-	local rootWorkspace = script.Parent.Parent.Parent
+	local srcWorkspace = script.Parent.Parent
+	local rootWorkspace = srcWorkspace.Parent
 	local JestRoblox = require(rootWorkspace.Dev.JestRoblox)
 	local jestExpect = JestRoblox.Globals.expect
-	local LuauPolyfill = require(rootWorkspace.Dev.LuauPolyfill)
+	local LuauPolyfill = require(rootWorkspace.LuauPolyfill)
 
-	local gql = require(rootWorkspace.GraphqlTag).gql
-	local resetCaches = require(rootWorkspace.GraphqlTag).resetCaches
+	local gql = require(srcWorkspace).gql
+	local resetCaches = require(srcWorkspace).resetCaches
 	local console, capturedWarns
 
 	local function captureWarn(...)
