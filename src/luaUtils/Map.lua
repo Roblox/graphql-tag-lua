@@ -1,4 +1,5 @@
 -- ROBLOX TODO: move this implementation to LuauPolyfill
+--!nocheck
 
 local srcWorkspace = script.Parent.Parent
 local rootWorkspace = srcWorkspace.Parent

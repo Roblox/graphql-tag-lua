@@ -1,10 +1,15 @@
 -- ROBLOX upstream: https://github.com/apollographql/graphql-tag/blob/v2.12.3/src/index.ts
+
 local rootWorkspace = script.Parent
-local parseModule = require(rootWorkspace.GraphQL).parse
+
 local GraphQLModule = require(rootWorkspace.GraphQL)
+local parseModule = GraphQLModule.parse
 type DocumentNode = GraphQLModule.DocumentNode
 type DefinitionNode = GraphQLModule.DefinitionNode
-type Location = GraphQLModule.Location
+type FragmentDefinitionNode = GraphQLModule.FragmentDefinitionNode
+-- ROBLOX todo: export Location from graphql-lua when it is exported
+-- type Location = GraphQLModule.Location
+type Location = { [string]: any }
 -- ROBLOX fix: add map to luau polyfills
 local Map = require(script.luaUtils.Map).Map
 local LuauPolyfill = require(rootWorkspace.LuauPolyfill)
@@ -14,12 +19,16 @@ local Object = LuauPolyfill.Object
 local Array = LuauPolyfill.Array
 local console = LuauPolyfill.console
 
-local docCache = Map.new()
-local fragmentSourceMap = Map.new()
+type Array<T> = LuauPolyfill.Array<T>
+type Record<T, U> = { [T]: U }
+
+local docCache = Map.new(nil)
+local fragmentSourceMap = Map.new(nil)
 local printFragmentWarnings = true
 local experimentalFragmentVariables = false
 local function normalize(string_: string)
-	return String.trim(string_:gsub(",+%s+", " "))
+	local strippedString = string_:gsub(",+%s+", " ")
+	return String.trim(strippedString)
 end
 
 local function cacheKeyFromLoc(loc: Location)
@@ -27,14 +36,16 @@ local function cacheKeyFromLoc(loc: Location)
 end
 
 local function processFragments(ast: DocumentNode)
-	local seenKeys = Set.new()
-	local definitions: DefinitionNode = {}
+	local seenKeys = Set.new(nil)
+	local definitions: Array<DefinitionNode> = {}
 
 	for i = 1, #ast.definitions do
 		local fragmentDefinition = ast.definitions[i]
 		if fragmentDefinition.kind == "FragmentDefinition" then
-			local fragmentName = fragmentDefinition.name.value
-			local sourceKey = cacheKeyFromLoc(fragmentDefinition.loc)
+			-- ROBLOX deviation: type narrowing isnt narrowing down to FragmentDefinitionNode type
+			local fragmentDefinitionNode = fragmentDefinition :: FragmentDefinitionNode
+			local fragmentName = fragmentDefinitionNode.name.value
+			local sourceKey = cacheKeyFromLoc((fragmentDefinitionNode.loc :: any) :: Location)
 
 			-- We know something about this fragment
 			local sourceKeySet = fragmentSourceMap:get(fragmentName)
@@ -51,13 +62,13 @@ local function processFragments(ast: DocumentNode)
 					)
 				end
 			elseif not sourceKeySet then
-				sourceKeySet = Set.new()
+				sourceKeySet = Set.new(nil)
 				fragmentSourceMap:set(fragmentName, sourceKeySet)
 			end
 			sourceKeySet:add(sourceKey)
 			if not seenKeys:has(sourceKey) then
 				seenKeys:add(sourceKey)
-				table.insert(definitions, fragmentDefinition)
+				table.insert(definitions, fragmentDefinitionNode)
 			end
 		else
 			table.insert(definitions, fragmentDefinition)
@@ -67,7 +78,7 @@ local function processFragments(ast: DocumentNode)
 end
 
 local function stripLoc(doc: DocumentNode)
-	local workSet = Set.new()
+	local workSet = Set.new(nil)
 	for i = 1, #workSet do
 		local node = workSet[i]
 		if node.loc then
@@ -82,14 +93,10 @@ local function stripLoc(doc: DocumentNode)
 		end
 	end
 
-	local loc = doc.loc :: Record<string, any>
-	local start = nil
-	local _end = nil
+	local loc = (doc.loc :: any) :: Record<string, any>
 	if loc then
-		local indexOfStart = table.find(loc, start)
-		local indexOfEnd = table.find(loc, _end)
-		table.remove(loc, indexOfStart)
-		table.remove(loc, indexOfEnd)
+		loc.startToken = nil
+		loc.endToken = nil
 	end
 	return doc
 end
@@ -99,7 +106,7 @@ local function parseDocument(source: string)
 
 	if not docCache:has(cacheKey) then
 		local parsed = parseModule(source, {
-			experimentalFragmentVariables,
+			experimentalFragmentVariables = experimentalFragmentVariables,
 		})
 
 		if not parsed or parsed.kind ~= "Document" then

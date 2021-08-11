@@ -16,7 +16,7 @@ return function()
 		table.insert(capturedWarns, table.concat({ ... }, " "))
 	end
 
-	local function overrideWarn(fn, ...)
+	local function overrideWarn(fn: (...any) -> (), ...)
 		local originalWarn = getfenv(fn).warn
 		getfenv(fn).warn = captureWarn
 		fn(...)
