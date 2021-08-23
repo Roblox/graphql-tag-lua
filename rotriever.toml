@@ -5,8 +5,8 @@ author = "Roblox"
 content_root = "src"
 
 [dependencies]
-GraphQL = {git="https://github.com/Roblox/graphql-lua", rev = "master"}
-LuauPolyfill = "github.com/roblox/luau-polyfill@0.2.0"
+GraphQL = { git = "https://github.com/Roblox/graphql-lua", rev = "master" }
+LuauPolyfill = { git = "https://github.com/roblox/luau-polyfill.git", rev = "0c5a3db" }
 
 [dev_dependencies]
 JestRoblox = "github.com/roblox/jest-roblox@2.0.0-pre.0"

@@ -10,9 +10,8 @@ type FragmentDefinitionNode = GraphQLModule.FragmentDefinitionNode
 -- ROBLOX todo: export Location from graphql-lua when it is exported
 -- type Location = GraphQLModule.Location
 type Location = { [string]: any }
--- ROBLOX fix: add map to luau polyfills
-local Map = require(script.Parent.luaUtils.Map).Map
 local LuauPolyfill = require(rootWorkspace.LuauPolyfill)
+local Map = LuauPolyfill.Map
 local Set = LuauPolyfill.Set
 local String = LuauPolyfill.String
 local Object = LuauPolyfill.Object
