@@ -6,7 +6,7 @@ content_root = "src"
 
 [dependencies]
 GraphQL = { git = "https://github.com/Roblox/graphql-lua", rev = "master" }
-LuauPolyfill = { git = "https://github.com/roblox/luau-polyfill.git", rev = "0c5a3db" }
+LuauPolyfill = "github.com/roblox/luau-polyfill@=0.2.6"
 
 [dev_dependencies]
-JestRoblox = "github.com/roblox/jest-roblox@2.0.0-pre.0"
+JestGlobals = "github.com/roblox/jest-roblox@=2.3.0"

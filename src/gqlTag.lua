@@ -19,18 +19,20 @@ local Array = LuauPolyfill.Array
 local console = LuauPolyfill.console
 
 type Array<T> = LuauPolyfill.Array<T>
+type Map<K, V> = LuauPolyfill.Map<K, V>
+type Set<T> = LuauPolyfill.Set<T>
 type Record<T, U> = { [T]: U }
 
-local docCache = Map.new(nil)
-local fragmentSourceMap = Map.new(nil)
+local docCache = Map.new(nil) :: Map<string, DocumentNode>
+local fragmentSourceMap = Map.new(nil) :: Map<string, Set<string>>
 local printFragmentWarnings = true
 local experimentalFragmentVariables = false
-local function normalize(string_: string)
+local function normalize(string_: string): string
 	local strippedString = string_:gsub(",+%s+", " ")
 	return String.trim(strippedString)
 end
 
-local function cacheKeyFromLoc(loc: Location)
+local function cacheKeyFromLoc(loc: Location): string
 	return normalize(loc.source.body:sub(loc.start, loc._end))
 end
 
@@ -76,7 +78,7 @@ local function processFragments(ast: DocumentNode)
 	return Object.assign({}, ast, { definitions = definitions })
 end
 
-local function stripLoc(doc: DocumentNode)
+local function stripLoc(doc: DocumentNode): DocumentNode
 	local workSet = Set.new(nil)
 	for i = 1, #workSet do
 		local node = workSet[i]
@@ -100,7 +102,7 @@ local function stripLoc(doc: DocumentNode)
 	return doc
 end
 
-local function parseDocument(source: string)
+local function parseDocument(source: string): DocumentNode
 	local cacheKey = normalize(source)
 
 	if not docCache:has(cacheKey) then
@@ -123,7 +125,7 @@ local function parseDocument(source: string)
 end
 
 --ROBLOX deviation: we are not dealing with fragmentation
-local function gql(literals: string)
+local function gql(literals: string): DocumentNode
 	if typeof(literals) == "string" then
 		return parseDocument(literals)
 	end
@@ -150,20 +152,20 @@ end
   return parseDocument(result);
 } ]]
 
-function resetCaches()
+function resetCaches(): ()
 	docCache:clear()
 	fragmentSourceMap:clear()
 end
 
-function disableFragmentWarnings()
+function disableFragmentWarnings(): ()
 	printFragmentWarnings = false
 end
 
-function enableExperimentalFragmentVariables()
+function enableExperimentalFragmentVariables(): ()
 	experimentalFragmentVariables = true
 end
 
-function disableExperimentalFragmentVariables()
+function disableExperimentalFragmentVariables(): ()
 	experimentalFragmentVariables = false
 end
 
