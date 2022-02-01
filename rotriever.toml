@@ -1,6 +1,6 @@
 [package]
 name = "GraphqlTag"
-version = "2.12.3"
+version = "2.12.4"
 author = "Roblox"
 content_root = "src"
 
