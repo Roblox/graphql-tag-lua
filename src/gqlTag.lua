@@ -49,7 +49,7 @@ local function processFragments(ast: DocumentNode)
 			local sourceKey = cacheKeyFromLoc((fragmentDefinitionNode.loc :: any) :: Location)
 
 			-- We know something about this fragment
-			local sourceKeySet = fragmentSourceMap:get(fragmentName)
+			local sourceKeySet = fragmentSourceMap:get(fragmentName) :: Set<string>
 			if sourceKeySet and not sourceKeySet:has(sourceKey) then
 				-- this is a problem because the app developer is trying to register another fragment with
 				-- the same name as one previously registered. So, we tell them about it.
@@ -63,7 +63,8 @@ local function processFragments(ast: DocumentNode)
 					)
 				end
 			elseif not sourceKeySet then
-				sourceKeySet = Set.new(nil)
+				-- ROBLOX FIXME Luau: needs type states/control flow
+				sourceKeySet = Set.new() :: Set<string>
 				fragmentSourceMap:set(fragmentName, sourceKeySet)
 			end
 			sourceKeySet:add(sourceKey)
@@ -121,7 +122,7 @@ local function parseDocument(source: string): DocumentNode
 			stripLoc(processFragments(parsed))
 		)
 	end
-	return docCache:get(cacheKey)
+	return docCache:get(cacheKey) :: DocumentNode
 end
 
 --ROBLOX deviation: we are not dealing with fragmentation

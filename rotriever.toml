@@ -1,12 +1,16 @@
 [package]
 name = "GraphqlTag"
-version = "2.12.4"
-author = "Roblox"
+version = "2.12.5"
+authors = [
+    "Chris Trześniewski <k.trzesniewski@gmail.com>",
+    "Ignacio Falk <flakolefluk@gmail.com>",
+]
+
 content_root = "src"
 
 [dependencies]
-GraphQL = { git = "https://github.com/Roblox/graphql-lua", rev = "master" }
-LuauPolyfill = "github.com/roblox/luau-polyfill@=0.2.6"
+GraphQL = "github.com/Roblox/graphql-lua@15.5.0"
+LuauPolyfill = "github.com/roblox/luau-polyfill@0.3.0"
 
 [dev_dependencies]
-JestGlobals = "github.com/roblox/jest-roblox@=2.3.0"
+JestGlobals = "github.com/roblox/jest-roblox@2.3.1"
