@@ -65,7 +65,8 @@ local function processFragments(ast: DocumentNode)
 			elseif not sourceKeySet then
 				-- ROBLOX FIXME Luau: needs type states/control flow
 				sourceKeySet = Set.new() :: Set<string>
-				fragmentSourceMap:set(fragmentName, sourceKeySet)
+				-- ROBLOX FIXME Luau: seems to ignore the fact that sourceKey is now not nil
+				fragmentSourceMap:set(fragmentName, (sourceKeySet :: any) :: Set<string>)
 			end
 			sourceKeySet:add(sourceKey)
 			if not seenKeys:has(sourceKey) then
